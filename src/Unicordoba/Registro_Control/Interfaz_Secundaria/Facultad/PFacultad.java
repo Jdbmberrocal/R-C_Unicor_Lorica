@@ -5,19 +5,51 @@
  */
 package Unicordoba.Registro_Control.Interfaz_Secundaria.Facultad;
 
+import Unicordoba.Registro_Control.Base_de_Datos.Controlador.FacultadJpaController;
+import Unicordoba.Registro_Control.Base_de_Datos.Controlador.UniversidadJpaController;
+import Unicordoba.Registro_Control.Base_de_Datos.Controlador.exceptions.IllegalOrphanException;
+import Unicordoba.Registro_Control.Base_de_Datos.Controlador.exceptions.NonexistentEntityException;
+import Unicordoba.Registro_Control.Base_de_Datos.Entity.Facultad;
+import Unicordoba.Registro_Control.Base_de_Datos.Entity.Universidad;
+import Unicordoba.Registro_Control.Interfaz_Secundaria.BasicaUno.Estado_Ventana;
+import Unicordoba.Registro_Control.Interfaz_Secundaria.BasicaUno.IPanelEdicion;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 /**
  *
  * @author AndresFelipe
  */
-public class PFacultad extends javax.swing.JPanel {
-
+public class PFacultad extends javax.swing.JPanel implements IPanelEdicion {
+   
     /**
      * Creates new form Facultad
      */
     public PFacultad() {
         initComponents();
+        CarcarCBUniversidades();  
+        EstadoCampos();
     }
-
+    
+    public void CarcarCBUniversidades(){        
+        entityManagerFactory = Persistence.createEntityManagerFactory("R-C_Unicor_LoricaPU");
+        List<Universidad> list = new UniversidadJpaController(entityManagerFactory).findUniversidadEntities();
+        for (Universidad list1 : list) {
+            CBUniversidad.addItem(list1);
+        }
+    }
+    
+    public void EstadoCampos(){
+        TFieldNombreFacultad.setEnabled(false);
+        CBUniversidad.setEnabled(false);
+        TFieldNombreDecano.setEnabled(false);
+        TFieldUbicacion.setEnabled(false);
+    }
+ 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,6 +65,8 @@ public class PFacultad extends javax.swing.JPanel {
         TFieldNombreFacultad = new javax.swing.JTextField();
         TFieldNombreDecano = new javax.swing.JTextField();
         TFieldUbicacion = new javax.swing.JTextField();
+        LUniversidad = new javax.swing.JLabel();
+        CBUniversidad = new javax.swing.JComboBox();
 
         LNombreFacultad.setText("Nombre de la Facultad:");
 
@@ -40,55 +74,151 @@ public class PFacultad extends javax.swing.JPanel {
 
         LUbicacion.setText("Ubicación:");
 
+        LUniversidad.setText("Universidad:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(LNombreFacultad)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(LNombreDecano)
-                            .addGap(24, 24, 24)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(LUbicacion)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(LUniversidad)
+                    .addComponent(LNombreFacultad)
+                    .addComponent(LNombreDecano)
+                    .addComponent(LUbicacion))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TFieldUbicacion)
                     .addComponent(TFieldNombreDecano)
                     .addComponent(TFieldNombreFacultad)
-                    .addComponent(TFieldUbicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
-                .addGap(25, 25, 25))
+                    .addComponent(CBUniversidad, 0, 261, Short.MAX_VALUE))
+                .addGap(9, 9, 9))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LNombreFacultad)
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(LNombreFacultad))
                     .addComponent(TFieldNombreFacultad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LNombreDecano)
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(LUniversidad))
+                    .addComponent(CBUniversidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(LNombreDecano))
                     .addComponent(TFieldNombreDecano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LUbicacion)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(LUbicacion))
                     .addComponent(TFieldUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(181, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JComboBox CBUniversidad;
     private javax.swing.JLabel LNombreDecano;
     private javax.swing.JLabel LNombreFacultad;
     private javax.swing.JLabel LUbicacion;
+    private javax.swing.JLabel LUniversidad;
     private javax.swing.JTextField TFieldNombreDecano;
     private javax.swing.JTextField TFieldNombreFacultad;
     private javax.swing.JTextField TFieldUbicacion;
     // End of variables declaration//GEN-END:variables
+
+    private EntityManagerFactory entityManagerFactory;
+    private EntityManager entityManager;
+    private Facultad facultad = null;
+    
+    @Override
+    public void Guardar(Estado_Ventana estado_Ventana ) {
+        try {
+            entityManagerFactory = Persistence.createEntityManagerFactory("R-C_Unicor_LoricaPU");
+            
+            facultad.setNombre(TFieldNombreFacultad.getText());
+            facultad.setUniversidadid((Universidad) CBUniversidad.getSelectedItem());
+            facultad.setDecano(TFieldNombreDecano.getText());
+            facultad.setUbicacion(TFieldUbicacion.getText());          
+            FacultadJpaController facultadJpaController = new FacultadJpaController(entityManagerFactory);
+            if (estado_Ventana.equals(Estado_Ventana.NUEVO)) {
+                facultadJpaController.create(facultad);
+            } else {
+                facultad.setId(facultad.getId());
+                facultadJpaController.edit(facultad);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    @Override
+    public void Eliminar() {
+        try {
+            entityManagerFactory = Persistence.createEntityManagerFactory("R-C_Unicor_LoricaPU");
+            FacultadJpaController facultadJpaController = new  FacultadJpaController(entityManagerFactory);
+            facultadJpaController.destroy(facultad.getId());          
+
+        } catch (NonexistentEntityException ex) {
+            ex.printStackTrace();
+        } catch (IllegalOrphanException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void ActivarEdicion() {
+        
+    }
+
+    @Override
+    public void Nuevo() {
+        facultad = new Facultad();
+    }
+
+    @Override
+    public void Seleccionar(Vector vectorSeleccion) {
+        entityManagerFactory = Persistence.createEntityManagerFactory("R-C_Unicor_LoricaPU");
+        FacultadJpaController facultadJpaController = new FacultadJpaController(entityManagerFactory);
+        
+        this.facultad = facultadJpaController.findFacultad(Integer.valueOf(vectorSeleccion.get(0).toString()));
+        TFieldNombreFacultad.setText(facultad.getNombre());
+        CBUniversidad.setSelectedItem(facultad.getUniversidadid().getNombre());
+        TFieldNombreDecano.setText(facultad.getDecano());
+        TFieldUbicacion.setText(facultad.getUbicacion());        
+    }
+
+    @Override
+    public List<Object[]> getListaParaTabla() {
+        entityManagerFactory = Persistence.createEntityManagerFactory("R-C_Unicor_LoricaPU");
+        FacultadJpaController facultadJpaController = new FacultadJpaController(entityManagerFactory);
+
+        List<Object[]> list = new ArrayList();
+        for (Facultad facultad : facultadJpaController.findFacultadEntities()) {
+            list.add(new Object[]{
+                facultad.getId(),
+                facultad.getUniversidadid().getNombre(),
+                facultad.getNombre(), 
+                facultad.getDecano(),
+                facultad.getUbicacion() 
+            });
+        }
+        return list;
+    }
+
+    @Override
+    public String[] getNombreDeColumnas() {
+        return new String[]{"ID", "Universidad", "Nombre","Decano","Ubicacion"};
+    }  
 }

@@ -59,8 +59,9 @@ public class InformacionBasica implements Serializable {
     @Basic(optional = false)
     @Column(name = "TI_CC")
     private int tiCc;
+    @Basic(optional = false)
     @Column(name = "Telefono")
-    private Integer telefono;
+    private String telefono;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "informacionBasicaId")
     private List<Estudiante> estudianteList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "informacionBasicaId")
@@ -75,13 +76,14 @@ public class InformacionBasica implements Serializable {
         this.id = id;
     }
 
-    public InformacionBasica(Integer id, String nombres, String apellidos, String codigo, String correo, int tiCc) {
+    public InformacionBasica(Integer id, String nombres, String apellidos, String codigo, String correo, int tiCc, String telefono) {
         this.id = id;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.codigo = codigo;
         this.correo = correo;
         this.tiCc = tiCc;
+        this.telefono = telefono;
     }
 
     public Integer getId() {
@@ -132,11 +134,11 @@ public class InformacionBasica implements Serializable {
         this.tiCc = tiCc;
     }
 
-    public Integer getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(Integer telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
@@ -189,7 +191,7 @@ public class InformacionBasica implements Serializable {
 
     @Override
     public String toString() {
-        return "RC_Unicor_Lorica_Entity.InformacionBasica[ id=" + id + " ]";
+        return "Unicordoba.Registro_Control.Base_de_Datos.Entity.InformacionBasica[ id=" + id + " ]";
     }
     
 }
